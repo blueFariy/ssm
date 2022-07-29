@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//Dao.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssmdemo.dao.ManagersMapper">
+    <select id="getAll" resultType="manager">
+        select mgrid,mgrname,mgrpwd from t_manager;
+    </select>
+    <select id="check" resultType="manager">
+        select mgrid,mgrname,mgrpwd from t_manager where mgrname = #{mgrname} and mgrpwd = #{mgrpwd};
+    </select>
+    <select id="getById" resultType="manager">
+        select mgrid,mgrname,mgrpwd from t_manager where mgrid = #{mgrid};
+    </select>
+    <insert id="insert" parameterType="manager">
+        insert into t_manager(mgrname,mgrpwd) values (#{mgrname},#{mgrpwd});
+    </insert>
+    <delete id="delete">
+        delete from t_manager where mgrid = #{mgrid};
+    </delete>
+    <update id="update" parameterType="manager">
+        update t_manager set mgrname = #{mgrname},mgrpwd = #{mgrpwd} where mgrid = #{mgrid};
+    </update>
+</mapper>

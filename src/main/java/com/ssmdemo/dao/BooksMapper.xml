@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//Dao.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssmdemo.dao.BooksMapper">
+    <sql id="columns">bookid
+    ,bookname,bookauthor,bookorigin,bookdate,bookprice,booksum</sql>
+    <select id="getAll" resultType="book">
+        select <include refid="columns"></include> from t_book
+    </select>
+    <select id="getById" resultType="book">
+        select <include refid="columns"></include> from t_book where bookid = #{bookid}
+    </select>
+    <select id="getByColumn" parameterType="map" resultType="book">
+        select <include refid="columns"></include> from t_book
+        <where>
+            <if test="bookid!=null and bookid!=''">
+                and bookid like concat('%',#{bookid},'%')
+            </if>
+            <if test="bookname!=null and bookname!=''">
+                and bookname like concat('%',#{bookname},'%')
+            </if>
+            <if test="bookauthor!=null and bookauthor!=''">
+                and bookauthor like concat('%',#{bookauthor},'%')
+            </if>
+            <if test="bookorigin!=null and bookorigin!=''">
+                and bookorigin like concat('%',#{bookorigin},'%')
+            </if>
+            <if test="bookdatebegin!=null and bookdateend!=null and bookdatebegin!='' and bookdateend!=''">
+                and bookdate between #{bookdatebegin} and #{bookdateend}
+            </if>
+            <if test="lowprice!=null and lowprice!='' and highprice!=null and highprice!=''">
+                and bookprice between #{lowprice} and #{highprice}
+            </if>
+        </where>
+        <if test="bookorder!=null and bookorder!=''">
+            order by booksum
+            <if test="bookorder=='asc'">
+                asc
+            </if>
+            <if test="bookorder=='desc'">
+                desc
+            </if>
+        </if>
+    </select>
+    <insert id="insert" parameterType="book">
+        insert into t_book
+        values (#{bookid}, #{bookname}, #{bookauthor}, #{bookorigin}, #{bookdate}, #{bookprice}, #{booksum})
+    </insert>
+    <delete id="delete">
+        delete
+        from t_book
+        where bookid = #{bookid}
+    </delete>
+    <update id="update" parameterType="book">
+        update t_book
+        <set>
+            <if test="bookname!=null and bookname!=''">
+                bookname=#{bookname},
+            </if>
+            <if test="bookauthor!=null and bookauthor!=''">
+                bookauthor=#{bookauthor},
+            </if>
+            <if test="bookorigin!=null and bookorigin!=''">
+                bookorigin=#{bookorigin},
+            </if>
+            <if test="bookdate!=null">
+                bookdate=#{bookdate},
+            </if>
+            <if test="bookprice!=null and bookprice!=''">
+                bookprice=#{bookprice},
+            </if>
+            <if test="booksum!=null and booksum!=''">
+                booksum=#{booksum},
+            </if>
+        </set>
+        where bookid = #{bookid}
+    </update>
+
+</mapper>
